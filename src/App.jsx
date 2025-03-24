@@ -1,35 +1,38 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from 'react';
 
-function App() {
-  const [count, setCount] = useState(0)
+function App(){
+    const [users, setUsers] = useState([]);
+    useEffect(() => {
+        fetch('http://localhost:8080/taskmanager/user/all')
+            .then(res => res.json())
+            .then(data => setUsers(data))
+            .catch(err => console.error(err));
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    }, []);
+    return (
+        <div style={{padding: "20px"}}>
+            <h1>Lista de Usuarios</h1>
+            <table border="1" cellPadding="10">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Fecha de Registro</th>
+                </tr>
+                </thead>
+                <tbody>
+                {users.map((user) => (
+                    <tr key={user.idUser}>
+                        <td>{user.idUser}</td>
+                        <td>{user.nameUser}</td>
+                        <td>{user.emailUser}</td>
+                        <td>{user.recordDateUser}</td>
+                    </tr>
+                ))}
+                </tbody>
+            </table>
+        </div>
+    )
 }
-
 export default App
